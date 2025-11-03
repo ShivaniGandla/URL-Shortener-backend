@@ -8,7 +8,7 @@ const { nanoid } = require("nanoid");
 const Url = require("./models/Url");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors({
   origin: "http://localhost:3001",   // your React app URL
@@ -35,7 +35,7 @@ app.post("/shorten", async (req, res) => {
   let existingUrl = await Url.findOne({ originalUrl });
   if (existingUrl) {
     return res.json({
-      shortUrl: `http://localhost:3000/${existingUrl.shortId}`,
+      shortUrl: `https://url-shortener-backend-55jr.onrender.com/${existingUrl.shortId}`,
       originalUrl: existingUrl.originalUrl,
       message: "URL already shortened earlier",
     });
@@ -47,7 +47,7 @@ app.post("/shorten", async (req, res) => {
   await newUrl.save();
 
   res.json({
-    shortUrl: `http://localhost:3000/${shortId}`,
+    shortUrl: `https://url-shortener-backend-55jr.onrender.com/${shortId}`,
     originalUrl,
     message: "New short URL created",
   });
