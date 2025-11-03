@@ -11,7 +11,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors({
-  origin: ["http://localhost:3000", "http://localhohttps://melodious-dango-453826.netlify.appst:3001"],   // your React app URL
+  origin: ["http://localhost:3000", "http://localhohttps://melodious-dango-453826.netlify.app"],   // your React app URL
   methods: ["GET", "POST"],
   allowedHeaders: ["Content-Type"],
 }));
