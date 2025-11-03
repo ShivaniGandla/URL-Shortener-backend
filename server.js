@@ -1,29 +1,37 @@
-const cors = require('cors');
-
-const connectDB = require("./db");
-connectDB();
-
 const express = require("express");
+const cors = require("cors");
 const { nanoid } = require("nanoid");
+const connectDB = require("./db");
 const Url = require("./models/Url");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors({
-  origin: ["http://localhost:3000", "http://localhohttps://melodious-dango-453826.netlify.app"],   // your React app URL
-  methods: ["GET", "POST"],
-  allowedHeaders: ["Content-Type"],
-}));
-// Middleware to parse JSON requests
+// ✅ Connect MongoDB
+connectDB();
+
+// ✅ Allow CORS for Netlify + Localhost
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "https://melodious-dango-453826.netlify.app",
+    ],
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"],
+  })
+);
+
+// ✅ Middleware
 app.use(express.json());
 
-// Test route
+// ✅ Root test
 app.get("/", (req, res) => {
   res.send("🚀 URL Shortener backend is running!");
 });
 
-// Route to create short URL
+// ✅ Shorten URL
 app.post("/shorten", async (req, res) => {
   const { originalUrl } = req.body;
 
@@ -41,7 +49,7 @@ app.post("/shorten", async (req, res) => {
     });
   }
 
-  // Otherwise, create a new one
+  // Otherwise, create new one
   const shortId = nanoid(6);
   const newUrl = new Url({ originalUrl, shortId });
   await newUrl.save();
@@ -53,7 +61,7 @@ app.post("/shorten", async (req, res) => {
   });
 });
 
-// ✅ Route to redirect short URL to original URL
+// ✅ Redirect short URL
 app.get("/:shortId", async (req, res) => {
   const { shortId } = req.params;
 
@@ -66,5 +74,5 @@ app.get("/:shortId", async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`✅ Server is running on http://localhost:${PORT}`);
+  console.log(`✅ Server running on http://localhost:${PORT}`);
 });
